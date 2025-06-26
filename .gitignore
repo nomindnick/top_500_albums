@@ -1,0 +1,32 @@
+# Gitignore for top_500_albums project
+
+# Frontend (Vite/React)
+/frontend/node_modules
+/frontend/dist
+.env.local
+.env.*.local
+
+# Backend (Flask/Python)
+/backend/venv
+__pycache__/
+*.pyc
+.env
+
+# Database
+*.sqlite3
+*.db
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
