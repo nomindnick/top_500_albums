@@ -1,0 +1,202 @@
+500 Top Albums Countdown: Application Specification
+
+Document Version: 1.0
+Date: June 26, 2025
+
+1. Overall Vision & Purpose
+
+"500 Top Albums Countdown" is a web application designed for music enthusiasts to systematically listen to and track their progress through Rolling Stone's list of the top 500 albums of all time. The core experience is a guided journey, starting from album #500 and "counting down" to #1.
+
+The application will provide a simple, focused interface for users to see their current album, mark it as complete, and optionally give it a personal rating. This creates a personal listening log and, in future phases, will power features like personalized top-album lists and AI-driven music recommendations for albums not on the main list.
+
+The primary goal is to create an engaging, long-term "challenge" for music lovers, helping them discover new music and catalog their opinions in a structured way.
+
+2. Core Features (User Stories)
+
+    As a new user, I want to:
+
+        Sign up for a new account with a username, email, and password.
+
+        Be guided through a simple onboarding process.
+
+        Have the option to start the list from the beginning (#500) or select the last album I've already listened to, so the app knows where I am in the countdown.
+
+    As a returning user, I want to:
+
+        Log in securely to my account.
+
+        Be taken directly to the view of the current album I need to listen to.
+
+        See the key details of the album: Rank, Album Title, Artist, and Year of Release.
+
+        Click a button to "Mark as Completed," which will automatically advance me to the next album in the list (e.g., from #489 to #488).
+
+    As a user who just completed an album, I want to:
+
+        Be presented with an option to give the album a personal rating (e.g., 1-5 stars).
+
+        Have the ability to skip rating an album if I don't have an opinion.
+
+    As a user who has rated albums, I want to:
+
+        View a personal page that lists all the albums I've rated, sortable by my rating, so I can see my personal "Top Albums" list.
+
+3. Technology Stack
+
+    Frontend: React (bootstrapped with Vite)
+
+    Backend: Python (using the Flask framework)
+
+    Database: PostgreSQL
+
+    AI Code Assistant: Your preferred AI coding tool
+
+4. Data Model and Database Schema
+
+The PostgreSQL database will consist of four primary tables.
+
+Table 1: albums
+
+Stores the static information for all 500 albums. This table will be populated once from a seed script.
+
+Table 2: users
+
+Stores user account and authentication information.
+
+Table 3: user_progress
+
+Tracks the current position of each user in the album countdown.
+
+Table 4: user_ratings
+
+Stores the optional ratings a user gives to an album they have completed.
+
+5. API Endpoints (Flask Backend)
+
+The backend will expose a RESTful API for the React frontend to consume.
+
+    POST /api/auth/register: Creates a new user.
+
+    POST /api/auth/login: Authenticates a user and returns a session token (e.g., JWT).
+
+    POST /api/auth/logout: Invalidates the user's session.
+
+    GET /api/albums: Returns the full list of all 500 albums (for onboarding selection).
+
+    GET /api/progress: (Protected) Gets the current album for the logged-in user.
+
+    POST /api/progress/complete: (Protected) Marks the current album as complete and advances the user's progress to the next album. Returns the new current album.
+
+    POST /api/ratings: (Protected) Submits a rating for a specific album.
+
+    GET /api/ratings: (Protected) Gets all album ratings for the logged-in user.
+
+6. UI/UX Flow & Design Philosophy
+
+The design will be minimalist, clean, and typography-focused to compensate for the lack of album art.
+
+    Landing/Login Page: Simple page with a call to action to "Start the Countdown" (Sign Up) or "Continue Your Journey" (Log In).
+
+    Onboarding:
+
+        After sign-up, a clean page asks: "Are you new to the list or have you already started?"
+
+        New: The user is immediately taken to the main view for album #500.
+
+        Already Started: The user is shown a searchable, filterable list of all 500 albums to select the last one they listened to. The system then sets their progress to the next album.
+
+    Main View (The "Countdown" Screen): This is the core of the app.
+
+        Dominant on the screen will be the album's Rank, Title, Artist, and Year, presented with beautiful, large typography.
+
+        A subtle, dynamically generated background color palette based on the album's release decade will give each screen a unique feel.
+
+        A single, clear call-to-action button: "Mark as Completed & Continue".
+
+    Rating Modal:
+
+        Upon clicking "Mark as Completed," a simple, non-intrusive modal appears.
+
+        It displays: "You've completed [Album Title]! How would you rate it?"
+
+        Shows a 5-star rating component and a "Skip" button.
+
+        After a selection is made, the modal disappears, and the main view transitions (e.g., fades) to the next album's information.
+
+Development Roadmap
+
+This roadmap is broken into phases. Instruct your AI coding assistant to work on one task at a time, providing it with the context of the overall specification.
+
+Phase 0: Project Setup & Foundation
+
+    [ ] Task 0.1: Initialize the Frontend project structure using npm create vite@latest with the React template.
+
+    [ ] Task 0.2: Initialize the Backend project structure for a Flask application (e.g., app/ directory, __init__.py, config.py).
+
+    [ ] Task 0.3: Set up a local PostgreSQL database named albums_countdown_db.
+
+    [ ] Task 0.4: Prepare the album data CSV file with the required columns (AlbumID, Rank, Album, Artist, Year).
+
+    [ ] Task 0.5: Create a Python script (seed.py) that reads the CSV and populates the albums table in the PostgreSQL database.
+
+Phase 1: MVP - The Core Countdown Experience
+
+    [ ] Task 1.1 (Backend): Implement the database models/tables (users, albums, user_progress) using an ORM like Flask-SQLAlchemy.
+
+    [ ] Task 1.2 (Backend): Implement user registration and login endpoints (/api/auth/register, /api/auth/login). Use password hashing (e.g., werkzeug.security).
+
+    [ ] Task 1.3 (Frontend): Create the React components for Sign Up and Login pages. Hook them up to the backend API endpoints.
+
+    [ ] Task 1.4 (Backend): Create the protected /api/progress endpoint that fetches the current album for the authenticated user based on their user_progress entry.
+
+    [ ] Task 1.5 (Backend): Implement the Onboarding logic. Create an endpoint that allows a new user to set their starting position.
+
+        If "starting fresh", create a user_progress entry pointing to the album with rank: 500.
+
+        If "selecting an album", create an endpoint that takes an album_id and sets the user's progress to the next album in the list.
+
+    [ ] Task 1.6 (Frontend): Build the Onboarding UI flow.
+
+    [ ] Task 1.7 (Frontend): Build the Main "Countdown" View component. It should fetch and display the current album's data from the /api/progress endpoint.
+
+    [ ] Task 1.8 (Backend): Implement the core /api/progress/complete endpoint. When called, it should update the user's album_id in the user_progress table to the next album (rank - 1).
+
+    [ ] Task 1.9 (Frontend): Add the "Mark as Completed" button to the Main View and connect its functionality to the backend endpoint. Ensure the view updates to show the new album upon success.
+
+Phase 2: Core Enhancements - Ratings & Personal Lists
+
+    [ ] Task 2.1 (Backend): Implement the user_ratings database model.
+
+    [ ] Task 2.2 (Backend): Create the /api/ratings (POST) endpoint to allow a user to submit a rating for an album. This should be called after an album is marked complete.
+
+    [ ] Task 2.3 (Frontend): Create the "Rating Modal" React component. Integrate it into the "Mark as Completed" flow.
+
+    [ ] Task 2.4 (Backend): Create the /api/ratings (GET) endpoint to retrieve all ratings for the currently logged-in user.
+
+    [ ] Task 2.5 (Frontend): Create a new page/route in React called "My Top Albums". This page should fetch data from the GET /api/ratings endpoint and display the user's rated albums in a list, with options to sort by rating.
+
+Phase 3: Advanced Features
+
+    [ ] Task 3.1 (Backend): Design and implement the AI Recommendation feature.
+
+        Create a new endpoint, e.g., /api/recommendations.
+
+        This endpoint will fetch the user's top-rated albums, format a prompt, and make an API call to a Large Language Model (e.g., Google's Gemini API).
+
+        Process the AI's response and send it back to the frontend.
+
+    [ ] Task 3.2 (Frontend): Create a new UI section or page to trigger and display the AI-powered album recommendations.
+
+    [ ] Task 3.3 (Backend): Add database queries to calculate user statistics (e.g., % complete, albums per decade). Create an endpoint /api/stats to expose this data.
+
+    [ ] Task 3.4 (Frontend): Create a "My Stats" dashboard component to visualize the data from the /api/stats endpoint.
+
+Phase 4: Deployment
+
+    [ ] Task 4.1: Containerize the Flask backend and React frontend using Docker.
+
+    [ ] Task 4.2: Set up a managed PostgreSQL instance on Google Cloud SQL.
+
+    [ ] Task 4.3: Deploy the containerized backend and frontend applications to Google Cloud Run.
+
+    [ ] Task 4.4: Configure environment variables and secrets (database URL, API keys) securely in the cloud environment.
