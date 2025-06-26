@@ -110,6 +110,25 @@ Recommended priorities:
 - [ ] Implement pagination for albums list
 - [ ] Add request/response interceptors for better error handling
 
+## Git Configuration
+
+### Branch Rename
+The default branch has been renamed from `master` to `main`. To complete the migration:
+1. Go to GitHub repository settings
+2. Change the default branch from "master" to "main"
+3. Then run: `git push origin --delete master`
+
+### Pre-commit Hooks
+Pre-commit hooks are configured but need to be installed:
+```bash
+./setup-pre-commit.sh
+```
+
+This will install hooks for:
+- Python: Black (formatting), Flake8 (linting), isort (imports)
+- JavaScript: Prettier (formatting), ESLint (linting)
+- General: trailing whitespace, file size checks, etc.
+
 ## Development Commands
 
 ### Backend
