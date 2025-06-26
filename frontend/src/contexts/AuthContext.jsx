@@ -16,14 +16,42 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
+  // Check token validity on mount and set up axios defaults
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
-  }, [token]);
+    const verifyToken = async () => {
+      const storedToken = localStorage.getItem('token');
+      
+      if (!storedToken) {
+        setLoading(false);
+        return;
+      }
+
+      // Set axios default header
+      axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+
+      try {
+        // Verify token by fetching user info
+        const response = await axios.get('http://localhost:5000/api/auth/me');
+        setUser({
+          id: response.data.id,
+          username: response.data.username,
+          email: response.data.email
+        });
+        setToken(storedToken);
+      } catch (error) {
+        // Token is invalid or expired
+        console.error('Token verification failed:', error);
+        localStorage.removeItem('token');
+        delete axios.defaults.headers.common['Authorization'];
+        setToken(null);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifyToken();
+  }, []);
 
   const login = async (username, password) => {
     try {
@@ -32,11 +60,11 @@ export const AuthProvider = ({ children }) => {
         password
       });
 
-      const { access_token, user_id, username: userName } = response.data;
+      const { access_token, user_id, username: userName, email } = response.data;
       
       localStorage.setItem('token', access_token);
       setToken(access_token);
-      setUser({ id: user_id, username: userName });
+      setUser({ id: user_id, username: userName, email });
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       
       return { success: true };
