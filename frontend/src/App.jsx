@@ -4,6 +4,7 @@ import Navigation from './components/Navigation';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import CurrentAlbum from './components/CurrentAlbum';
+import Onboarding from './components/Onboarding';
 import ProtectedRoute from './components/ProtectedRoute';
 import AppLoader from './components/AppLoader';
 import './App.css';
@@ -23,6 +24,14 @@ function AppContent() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route 
+              path="/onboarding" 
+              element={
+                <ProtectedRoute>
+                  <Onboarding />
+                </ProtectedRoute>
+              } 
+            />
             <Route 
               path="/countdown" 
               element={

@@ -83,11 +83,7 @@ def get_progress():
     user_progress = UserProgress.query.filter_by(user_id=user_id).first()
     
     if not user_progress:
-        first_album = Album.query.filter_by(rank=500).first()
-        if first_album:
-            user_progress = UserProgress(user_id=user_id, current_album_id=first_album.id)
-            db.session.add(user_progress)
-            db.session.commit()
+        return jsonify({'message': 'No progress found', 'needs_onboarding': True}), 404
     
     if user_progress and user_progress.album:
         return jsonify({
@@ -102,6 +98,45 @@ def get_progress():
         }), 200
     
     return jsonify({'message': 'No album data found'}), 404
+
+@progress_bp.route('/initialize', methods=['POST'])
+@jwt_required()
+def initialize_progress():
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    
+    # Check if user already has progress
+    existing_progress = UserProgress.query.filter_by(user_id=user_id).first()
+    if existing_progress:
+        return jsonify({'message': 'Progress already initialized'}), 400
+    
+    album_rank = data.get('album_rank', 500)  # Default to 500 if not specified
+    
+    # Validate rank
+    if not isinstance(album_rank, int) or album_rank < 1 or album_rank > 500:
+        return jsonify({'message': 'Invalid album rank. Must be between 1 and 500'}), 400
+    
+    # Find the album by rank
+    album = Album.query.filter_by(rank=album_rank).first()
+    if not album:
+        return jsonify({'message': f'Album with rank {album_rank} not found'}), 404
+    
+    # Create user progress
+    user_progress = UserProgress(user_id=user_id, current_album_id=album.id)
+    db.session.add(user_progress)
+    db.session.commit()
+    
+    return jsonify({
+        'message': 'Progress initialized successfully',
+        'current_album': {
+            'id': album.id,
+            'rank': album.rank,
+            'artist': album.artist,
+            'album': album.album,
+            'info': album.info,
+            'description': album.description
+        }
+    }), 201
 
 @progress_bp.route('/complete', methods=['POST'])
 @jwt_required()

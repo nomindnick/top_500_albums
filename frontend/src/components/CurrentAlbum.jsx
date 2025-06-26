@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import AlbumRating from './AlbumRating';
@@ -11,6 +12,7 @@ const CurrentAlbum = () => {
   const [showRating, setShowRating] = useState(false);
   const [completing, setCompleting] = useState(false);
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const fetchCurrentAlbum = async () => {
     if (!isAuthenticated) return;
@@ -21,6 +23,11 @@ const CurrentAlbum = () => {
       setCurrentAlbum(response.data.current_album);
       setError(null);
     } catch (err) {
+      // Check if user needs onboarding
+      if (err.response?.status === 404 && err.response?.data?.needs_onboarding) {
+        navigate('/onboarding');
+        return;
+      }
       setError('Failed to fetch current album');
       console.error('Error fetching current album:', err);
     } finally {
