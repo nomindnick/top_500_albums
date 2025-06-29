@@ -1,9 +1,10 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from .config import Config
+import os
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -24,5 +25,15 @@ def create_app():
     app.register_blueprint(progress_bp, url_prefix='/api/progress')
     app.register_blueprint(albums_bp, url_prefix='/api/albums')
     app.register_blueprint(ratings_bp, url_prefix='/api/ratings')
+    
+    # Serve React app in production
+    if os.environ.get('FLASK_ENV') == 'production':
+        @app.route('/', defaults={'path': ''})
+        @app.route('/<path:path>')
+        def serve_react_app(path):
+            if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+                return send_from_directory(app.static_folder, path)
+            else:
+                return send_from_directory(app.static_folder, 'index.html')
 
     return app

@@ -1,0 +1,12 @@
+# Include base requirements
+-r requirements.txt
+
+# Production server
+gunicorn==21.2.0
+
+# Cloud SQL PostgreSQL
+pg8000==1.30.4
+sqlalchemy-cloud-sql-pg8000==1.0.0
+
+# Production monitoring (optional but recommended)
+python-json-logger==2.0.7

@@ -1,0 +1,33 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/albums-app', '.']
+  
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/albums-app']
+  
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'albums-app'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/albums-app'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--add-cloudsql-instances'
+      - '$_CLOUD_SQL_INSTANCE'
+      - '--set-env-vars'
+      - 'DATABASE_URL=$_DATABASE_URL,JWT_SECRET_KEY=$_JWT_SECRET_KEY,SECRET_KEY=$_SECRET_KEY,FLASK_ENV=production'
+
+substitutions:
+  _CLOUD_SQL_INSTANCE: 'PROJECT_ID:REGION:INSTANCE_NAME'
+  _DATABASE_URL: 'postgresql://albums_countdown_user:PASSWORD@/albums_countdown_db?host=/cloudsql/PROJECT_ID:REGION:INSTANCE_NAME'
+  _JWT_SECRET_KEY: 'CHANGE_ME_TO_STRONG_KEY'
+  _SECRET_KEY: 'CHANGE_ME_TO_ANOTHER_STRONG_KEY'
