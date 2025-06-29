@@ -44,7 +44,7 @@ def login():
     if not user or not check_password_hash(user.password_hash, password):
         return jsonify({'message': 'Invalid credentials'}), 401
 
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=str(user.id))
     return jsonify({
         'message': 'Login successful',
         'user_id': user.id,
@@ -61,7 +61,7 @@ def logout():
 @auth_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_current_user():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     user = User.query.get(user_id)
     
     if not user:
@@ -78,7 +78,7 @@ progress_bp = Blueprint('progress', __name__)
 @progress_bp.route('', methods=['GET'])
 @jwt_required()
 def get_progress():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     
     user_progress = UserProgress.query.filter_by(user_id=user_id).first()
     
@@ -113,7 +113,7 @@ def get_progress():
 @progress_bp.route('/initialize', methods=['POST'])
 @jwt_required()
 def initialize_progress():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     data = request.get_json()
     
     # Check if user already has progress
@@ -152,7 +152,7 @@ def initialize_progress():
 @progress_bp.route('/complete', methods=['POST'])
 @jwt_required()
 def complete_album():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     
     user_progress = UserProgress.query.filter_by(user_id=user_id).first()
     
@@ -213,7 +213,7 @@ ratings_bp = Blueprint('ratings', __name__)
 @ratings_bp.route('', methods=['POST'])
 @jwt_required()
 def submit_rating():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     data = request.get_json()
     
     album_id = data.get('album_id')
@@ -244,7 +244,7 @@ def submit_rating():
 @ratings_bp.route('', methods=['GET'])
 @jwt_required()
 def get_ratings():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     
     ratings = UserRating.query.filter_by(user_id=user_id).join(Album).order_by(Album.rank.desc()).all()
     

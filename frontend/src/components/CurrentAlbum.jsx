@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../utils/axiosConfig';
 import { useAuth } from '../contexts/AuthContext';
 import AlbumRating from './AlbumRating';
 import './CurrentAlbum.css';

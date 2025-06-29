@@ -48,6 +48,7 @@ function Signup() {
                             onChange={(e) => setUsername(e.target.value)}
                             required
                             disabled={loading}
+                            placeholder="Choose a unique username"
                         />
                     </div>
                     <div className="form-group">
