@@ -86,7 +86,18 @@ def get_progress():
         return jsonify({'message': 'No progress found', 'needs_onboarding': True}), 404
     
     if user_progress and user_progress.album:
+        # Check if user has completed all albums
+        if user_progress.album.rank == 1:
+            # Check if they've actually marked it as complete
+            completed_albums = UserRating.query.filter_by(user_id=user_id).count()
+            if completed_albums >= 500:
+                return jsonify({
+                    'all_completed': True,
+                    'message': 'All albums completed!'
+                }), 200
+        
         return jsonify({
+            'all_completed': False,
             'current_album': {
                 'id': user_progress.album.id,
                 'rank': user_progress.album.rank,
@@ -153,7 +164,10 @@ def complete_album():
         return jsonify({'message': 'No current album found'}), 404
     
     if current_album.rank == 1:
-        return jsonify({'message': 'Congratulations! You\'ve completed all 500 albums!'}), 200
+        return jsonify({
+            'message': 'Congratulations! You\'ve completed all 500 albums!',
+            'all_completed': True
+        }), 200
     
     next_album = Album.query.filter_by(rank=current_album.rank - 1).first()
     
@@ -165,6 +179,7 @@ def complete_album():
     
     return jsonify({
         'message': 'Album completed successfully',
+        'all_completed': False,
         'next_album': {
             'id': next_album.id,
             'rank': next_album.rank,

@@ -5,13 +5,22 @@ const AlbumRating = ({ album, onSubmit, onSkip }) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async () => {
     if (rating === 0) return;
     
     setSubmitting(true);
-    await onSubmit(rating);
-    setSubmitting(false);
+    setError('');
+    
+    try {
+      await onSubmit(rating);
+    } catch (err) {
+      setError('Failed to submit rating. Please try again.');
+      console.error('Rating submission error:', err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const displayRating = hoveredRating || rating;
@@ -57,6 +66,8 @@ const AlbumRating = ({ album, onSubmit, onSkip }) => {
           Skip Rating
         </button>
       </div>
+      
+      {error && <div className="rating-error">{error}</div>}
     </div>
   );
 };

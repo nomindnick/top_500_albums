@@ -1,0 +1,274 @@
+.user-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.user-dashboard h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #333;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progress-bar-container {
+  margin: 2rem 0;
+}
+
+.progress-bar {
+  background: #e9ecef;
+  border-radius: 10px;
+  height: 30px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  background: linear-gradient(to right, #007bff, #0056b3);
+  height: 100%;
+  transition: width 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+}
+
+.progress-text {
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.current-album-info {
+  background: #e8f4ff;
+  border-left: 4px solid #007bff;
+  padding: 1rem 1.5rem;
+  margin: 2rem 0;
+  border-radius: 5px;
+}
+
+.current-album-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #0056b3;
+}
+
+.current-album-info p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.ratings-section {
+  margin-top: 3rem;
+}
+
+.ratings-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.filters-container {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-group label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.filter-group select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.no-ratings {
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+  padding: 3rem 0;
+}
+
+.ratings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.rating-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.rating-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #007bff;
+}
+
+.rating-rank {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #007bff;
+  min-width: 60px;
+}
+
+.rating-content {
+  flex: 1;
+}
+
+.rating-content h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.rating-artist {
+  margin: 0 0 0.5rem 0;
+  color: #6c757d;
+  font-size: 0.95rem;
+}
+
+.rating-stars {
+  font-size: 1.2rem;
+  color: #ffc107;
+  margin-bottom: 0.5rem;
+}
+
+.rating-date {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #adb5bd;
+}
+
+.dashboard-loading,
+.dashboard-error {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+}
+
+.dashboard-error {
+  color: #dc3545;
+}
+
+.completion-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.completion-banner h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+}
+
+.completion-banner p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .user-dashboard {
+    padding: 1rem;
+  }
+
+  .user-dashboard h1 {
+    font-size: 2rem;
+  }
+
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .filters-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ratings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rating-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .rating-rank {
+    font-size: 1.5rem;
+    min-width: auto;
+  }
+}

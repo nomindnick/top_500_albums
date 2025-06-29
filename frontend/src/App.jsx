@@ -5,6 +5,8 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import CurrentAlbum from './components/CurrentAlbum';
 import Onboarding from './components/Onboarding';
+import UserDashboard from './components/UserDashboard';
+import CompletionCelebration from './components/CompletionCelebration';
 import ProtectedRoute from './components/ProtectedRoute';
 import AppLoader from './components/AppLoader';
 import './App.css';
@@ -37,6 +39,22 @@ function AppContent() {
               element={
                 <ProtectedRoute>
                   <CurrentAlbum />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <UserDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/celebration" 
+              element={
+                <ProtectedRoute>
+                  <CompletionCelebration />
                 </ProtectedRoute>
               } 
             />

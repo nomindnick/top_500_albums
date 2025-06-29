@@ -19,7 +19,7 @@ const CurrentAlbum = () => {
     
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/progress');
+      const response = await axios.get('/api/progress');
       setCurrentAlbum(response.data.current_album);
       setError(null);
     } catch (err) {
@@ -42,11 +42,10 @@ const CurrentAlbum = () => {
   const handleComplete = async () => {
     setCompleting(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/progress/complete');
+      const response = await axios.post('/api/progress/complete');
       
-      if (response.data.message.includes('Congratulations')) {
-        setCurrentAlbum(null);
-        setError(response.data.message);
+      if (response.data.all_completed) {
+        navigate('/celebration');
       } else {
         setShowRating(true);
       }
@@ -60,7 +59,7 @@ const CurrentAlbum = () => {
 
   const handleRatingSubmit = async (rating) => {
     try {
-      await axios.post('http://localhost:5000/api/ratings', {
+      await axios.post('/api/ratings', {
         album_id: currentAlbum.id,
         rating: rating
       });
