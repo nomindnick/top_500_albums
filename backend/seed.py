@@ -42,5 +42,9 @@ def seed_albums_table(csv_filepath):
             conn.close()
 
 if __name__ == "__main__":
-    csv_file = '../rolling_stone_top_500_albums_2020.csv'
+    # In Docker, the CSV is in the same directory
+    csv_file = 'rolling_stone_top_500_albums_2020.csv'
+    if not os.path.exists(csv_file):
+        # Try parent directory for local development
+        csv_file = '../rolling_stone_top_500_albums_2020.csv'
     seed_albums_table(csv_file)

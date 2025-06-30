@@ -19,7 +19,7 @@ const Onboarding = () => {
   const fetchAlbums = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/albums');
+      const response = await axios.get('/api/albums');
       setAlbums(response.data.albums);
       setError(null);
     } catch (err) {
@@ -43,7 +43,7 @@ const Onboarding = () => {
       setSubmitting(true);
       setError(null);
       
-      await axios.post('http://localhost:5000/api/progress/initialize', {
+      await axios.post('/api/progress/initialize', {
         album_rank: rank
       });
       

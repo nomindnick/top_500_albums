@@ -19,11 +19,13 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy backend requirements and install
-COPY backend/requirements-prod.txt ./
+COPY backend/requirements*.txt ./
 RUN pip install --no-cache-dir -r requirements-prod.txt
 
 # Copy backend code
 COPY backend/ ./
+COPY reset_db.py ./
+COPY rolling_stone_top_500_albums_2020.csv ./
 
 # Copy frontend build
 COPY --from=frontend-build /app/frontend/dist ./static

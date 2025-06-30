@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 // Configure axios defaults
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// In production, use relative URLs (same domain)
+// In development, use localhost
+const isDevelopment = import.meta.env.DEV;
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || (isDevelopment ? 'http://localhost:5000' : '');
 
 // Request interceptor to add auth token
 axios.interceptors.request.use(

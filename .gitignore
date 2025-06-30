@@ -30,3 +30,17 @@ Thumbs.db
 *.log
 *.tmp
 *.swp
+
+# Deployment scripts with credentials
+deploy.sh
+migrate.sh
+seed.sh
+
+# Test files
+test_app.py
+
+# Backup files
+*.bak
+
+# Google Cloud files
+.gcloudignore
